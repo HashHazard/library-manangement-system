@@ -56,7 +56,7 @@ async def api_update_student(
     student = {k: v for k, v in student.model_dump(
         exclude_unset=True).items() if v is not None}
 
-    is_updated = await update_student(student)
+    is_updated = await update_student(id, student)
 
     if is_updated:
         return JSONResponse(status_code=status.HTTP_204_NO_CONTENT,
