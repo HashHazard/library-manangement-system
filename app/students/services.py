@@ -34,26 +34,33 @@ async def retrieve_student(id: str):
     """
     Return details of a single student
     """
-    student = await db_collection.find_one({"_id": ObjectId(id)}, {"_id": 0})
-    return student
+    if ObjectId.is_valid(id):
+        student = await db_collection.find_one({"_id": ObjectId(id)}, {"_id": 0})
+        return student
+    return None
 
 
 async def update_student(id: str, data: dict):
     """
     Update student data and return confirmation
     """
-    if len(data) < 1:
-        return False
+    student = await retrieve_student(id)
+    if student:
+        if len(data) < 1:
+            return False
 
-    result = await db_collection.update_one({"_id": ObjectId(id)}, {"$set": data})
-    return result.modified_count > 0
+        result = await db_collection.update_one({"_id": ObjectId(id)}, {"$set": data})
+        return result.modified_count > 0
+    return False
 
 
 async def delete_student(id: str):
     """
     Delete student data
     """
-    delete_result = await db_collection.delete_one({"_id": ObjectId(id)})
-    if delete_result.deleted_count == 1:
-        return True
+    student = await retrieve_student(id)
+    if student:
+        delete_result = await db_collection.delete_one({"_id": ObjectId(id)})
+        if delete_result.deleted_count == 1:
+            return True
     return False

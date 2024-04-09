@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Body, HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
+from bson import ObjectId
 
 from .models import StudentModel, UpdateStudentModel
 from .services import (
@@ -53,6 +54,7 @@ async def api_update_student(
     """
     Update details of a single student by ID.
     """
+
     student = {k: v for k, v in student.model_dump(
         exclude_unset=True).items() if v is not None}
 
@@ -62,7 +64,7 @@ async def api_update_student(
         return JSONResponse(status_code=status.HTTP_204_NO_CONTENT,
                             content={})
 
-    raise HTTPException(status_code=404, detail="Student not found")
+    raise HTTPException(status_code=404, detail="Error occurred")
 
 
 @ router.delete("/{id}")
