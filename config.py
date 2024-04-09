@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings
 
 class CommonSettings(BaseSettings):
     APP_NAME: str = "Library Management System"
-    DEBUG_MODE: bool = True
+    DEBUG_MODE: bool = False
 
 
 class ServerSettings(BaseSettings):
